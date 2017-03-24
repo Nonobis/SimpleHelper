@@ -20,7 +20,7 @@
 		<tags>Helper Library</tags>
 	</metadata>
   <files>
-    <file src="bin\Release\SimpleHelper.dll" target="lib\SimpleHelper.dll" />
-    <file src="bin\Release\SimpleHelper.pdb" target="lib\SimpleHelper.pdb" />
+    <file src="*.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\*.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
   </files>
 </package>
