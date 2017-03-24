@@ -108,7 +108,6 @@
     <Compile Include="TimeWatchHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="package.builder.json" />
     <None Include="SimpleHelper.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
