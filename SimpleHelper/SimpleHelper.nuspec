@@ -15,11 +15,12 @@
     <authors>Arnaud Dartois</authors>
     <owners>Arnaud Dartois</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<releaseNotes>Add support for framework 3.5 to 4.6.1.</releaseNotes>
+		<releaseNotes></releaseNotes>
 		<copyright>Copyright, Arnaud Dartois 2016</copyright>
 		<tags>Helper Library</tags>
 	</metadata>
   <files>
+    <file src="bin\Release\SimpleHelper.dll" target="lib\SimpleHelper.dll" />
     <file src="bin\Release\SimpleHelper.pdb" target="lib\SimpleHelper.pdb" />
   </files>
 </package>
