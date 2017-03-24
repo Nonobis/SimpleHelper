@@ -20,17 +20,6 @@
 		<tags>Helper Library</tags>
 	</metadata>
   <files>
-    <file src="bin\Release\net35\SimpleHelper.dll" target="lib\net35\SimpleHelper.dll" />
-    <file src="bin\Release\net35\SimpleHelper.pdb" target="lib\net35\SimpleHelper.pdb" />
-    <file src="bin\Release\net40\SimpleHelper.dll" target="lib\net40\SimpleHelper.dll" />
-    <file src="bin\Release\net40\SimpleHelper.pdb" target="lib\net40\SimpleHelper.pdb" />
-    <file src="bin\Release\net45\SimpleHelper.dll" target="lib\net45\SimpleHelper.dll" />
-    <file src="bin\Release\net45\SimpleHelper.pdb" target="lib\net45\SimpleHelper.pdb" />
-    <file src="bin\Release\net451\SimpleHelper.dll" target="lib\net451\SimpleHelper.dll" />
-    <file src="bin\Release\net451\SimpleHelper.pdb" target="lib\net451\SimpleHelper.pdb" />
-    <file src="bin\Release\net452\SimpleHelper.dll" target="lib\net452\SimpleHelper.dll" />
-    <file src="bin\Release\net452\SimpleHelper.pdb" target="lib\net452\SimpleHelper.pdb" />
-    <file src="bin\Release\net461\SimpleHelper.dll" target="lib\net461\SimpleHelper.dll" />
-    <file src="bin\Release\net461\SimpleHelper.pdb" target="lib\net461\SimpleHelper.pdb" />
+    <file src="bin\Release\SimpleHelper.pdb" target="lib\SimpleHelper.pdb" />
   </files>
 </package>
