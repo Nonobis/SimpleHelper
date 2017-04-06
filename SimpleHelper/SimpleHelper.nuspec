@@ -16,7 +16,7 @@
     <authors>Arnaud Dartois</authors>
     <owners>Arnaud Dartois</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<releaseNotes></releaseNotes>
+		<releaseNotes>Add ParallelsHelper and Refactoring</releaseNotes>
 		<copyright>Copyright, Arnaud Dartois 2016-2017</copyright>
 		<tags>Helper Library Collection</tags>
 	</metadata>
