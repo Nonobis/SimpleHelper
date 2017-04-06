@@ -9,15 +9,16 @@
 
 	<metadata>
 		<id>SimpleHelper</id>
-		<version>0.0.0.10</version>
+		<version>0.0.0.0</version>
 		<title>SimpleHelper</title>
     <description>Simple collection of Helper for your project.</description>
+    <summary>Simple collection of Helper for your project.</summary>
     <authors>Arnaud Dartois</authors>
     <owners>Arnaud Dartois</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright, Arnaud Dartois 2016</copyright>
-		<tags>Helper Library</tags>
+		<copyright>Copyright, Arnaud Dartois 2016-2017</copyright>
+		<tags>Helper Library Collection</tags>
 	</metadata>
   <files>
     <file src="*.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
