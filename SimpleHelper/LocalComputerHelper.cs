@@ -6,7 +6,7 @@ using System.Security.Principal;
 /// <summary>
 /// The Helper namespace.
 /// </summary>
-namespace Community.Tools
+namespace SimpleHelper
 {
     /// <summary>
     /// Class LocalComputerHelper.
