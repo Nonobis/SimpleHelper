@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package >
+	<!--
+	Any nuget reference you add will be included in the nuget package as a dependency without you
+	having to add it in here.
+	
+	For more info on how to compose a nuspec file see http://docs.nuget.org/create/nuspec-reference 
+	-->
+
+	<metadata>
+		<id>SimpleHelper.Core</id>
+		<version>0.0.0.0</version>
+		<title>SimpleHelper</title>
+    <description>Simple collection of Helper for your project.</description>
+    <summary>Simple collection of Helper for your project.</summary>
+    <authors>Arnaud Dartois</authors>
+    <owners>Arnaud Dartois</owners>
+    <projectUrl>https://github.com/Nonobis/SimpleHelper</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<releaseNotes>Fix missing Parralels Helper</releaseNotes>
+		<copyright>Copyright, Arnaud Dartois 2016-2017</copyright>
+		<tags>Helper Library Collection NetStandard</tags>
+	</metadata>
+  <files>
+    <file src="**\SimpleHelper.Core.*" target="lib" exclude="*.nupkg;*.vshost.*"/>
+  </files>
+</package>
