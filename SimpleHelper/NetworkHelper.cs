@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 namespace SimpleHelper
 {
@@ -107,6 +108,19 @@ namespace SimpleHelper
                 throw new ApplicationException("Out of unused ports");
             }
             return unusedPort;
+        }
+
+        /// <summary>
+        /// Get First available port
+        /// </summary>
+        /// <returns></returns>
+        public static int GetAvailablePort()
+        {
+            TcpListener l = new TcpListener(IPAddress.Loopback, 0);
+            l.Start();
+            int port = ((IPEndPoint)l.LocalEndpoint).Port;
+            l.Stop();
+            return port;
         }
 
         /// <summary>
