@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 
@@ -74,6 +76,37 @@ namespace SimpleHelper
                 str = BitConverter.ToString(mac.GetAddressBytes()).Replace('-', ':');
             }
             return str;
+        }
+
+        /// <summary>
+        /// Find a free port in a port range
+        /// </summary>
+        /// <returns></returns>
+        public static int GetFreePortInRange(int PortStartIndex, int PortEndIndex)
+        {
+            IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] tcpEndPoints = ipGlobalProperties.GetActiveTcpListeners();
+            List<int> usedServerTCpPorts = tcpEndPoints.Select(p => p.Port).ToList<int>();
+            IPEndPoint[] udpEndPoints = ipGlobalProperties.GetActiveUdpListeners();
+            List<int> usedServerUdpPorts = udpEndPoints.Select(p => p.Port).ToList<int>();
+            TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+            List<int> usedPorts = tcpConnInfoArray.Where(p => p.State != TcpState.Closed).Select(p => p.LocalEndPoint.Port).ToList<int>();
+            usedPorts.AddRange(usedServerTCpPorts.ToArray());
+            usedPorts.AddRange(usedServerUdpPorts.ToArray());
+            int unusedPort = 0;
+            for (int port = PortStartIndex; port < PortEndIndex; port++)
+            {
+                if (!usedPorts.Contains(port))
+                {
+                    unusedPort = port;
+                    break;
+                }
+            }
+            if (unusedPort == 0)
+            {
+                throw new ApplicationException("Out of unused ports");
+            }
+            return unusedPort;
         }
 
         /// <summary>
