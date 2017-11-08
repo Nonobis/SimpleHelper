@@ -28,5 +28,20 @@ namespace SimpleHelper
                 return getrandom.Next(min, max);
             }
         }
+
+        /// <summary>
+        /// Gets the random doube number.
+        /// </summary>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        /// <returns></returns>
+        public static double GetRandomDouble(double min, double max)
+        {
+            lock (syncLock)
+            {
+                return getrandom.NextDouble() * (max - min) + min;
+            }
+        }
+
     }
 }
