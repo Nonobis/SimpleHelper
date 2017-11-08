@@ -127,12 +127,13 @@ namespace SimpleHelper
             }
         }
 
-        public static string FileToBase64(this FileInfo pFile)
+        public static string FileToBase64(string pFilePath)
         {
             string sValue = string.Empty;
-            if (pFile!=null && pFile.Exists)
+            var oFile = new FileInfo(pFilePath);
+            if (oFile != null && oFile.Exists)
             {
-                FileStream fs = new FileStream(pFile.FullName,
+                FileStream fs = new FileStream(oFile.FullName,
                                                FileMode.Open,
                                                FileAccess.Read);
                 byte[] filebytes = new byte[fs.Length];
@@ -144,17 +145,21 @@ namespace SimpleHelper
             return sValue;
         }
 
-        public static void FromBase64ToFile(this string pStringBase64OfFile, string psFilePath)
+        public static void FromBase64ToFile(string pData, string psFilePath, bool pDeleteIfExisting)
         {
-            if (!string.IsNullOrEmpty(pStringBase64OfFile))
+            if (!string.IsNullOrEmpty(pData) )
             {
-                byte[] filebytes = Convert.FromBase64String(pStringBase64OfFile);
-                FileStream fs = new FileStream(psFilePath,
+                if (File.Exists(pData) && pDeleteIfExisting)
+                    File.Delete(psFilePath);
+
+                byte[] filebytes = Convert.FromBase64String(pData);
+                using (FileStream fs = new FileStream(psFilePath,
                                                FileMode.CreateNew,
                                                FileAccess.Write,
-                                               FileShare.None);
-                fs.Write(filebytes, 0, filebytes.Length);
-                fs.Close();
+                                               FileShare.None))
+                {
+                    fs.Write(filebytes, 0, filebytes.Length);
+                }
             }
         }
 

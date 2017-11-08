@@ -17,7 +17,7 @@
     <owners>Arnaud Dartois</owners>
     <projectUrl>https://github.com/Nonobis/SimpleHelper</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<releaseNotes>Fix AssemblyHelper.AssemblyTile, Add new Methods in FileHelper and RandomHelper</releaseNotes>
+		<releaseNotes>Fix FileHelper</releaseNotes>
 		<copyright>Copyright, Arnaud Dartois 2016-2017</copyright>
 		<tags>Helper Library Collection</tags>
 	</metadata>
