@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SimpleHelper
@@ -123,6 +124,37 @@ namespace SimpleHelper
             catch
             {
                 return false;
+            }
+        }
+
+        public static string FileToBase64(this FileInfo pFile)
+        {
+            string sValue = string.Empty;
+            if (pFile!=null && pFile.Exists)
+            {
+                FileStream fs = new FileStream(pFile.FullName,
+                                               FileMode.Open,
+                                               FileAccess.Read);
+                byte[] filebytes = new byte[fs.Length];
+                fs.Read(filebytes, 0, Convert.ToInt32(fs.Length));
+                sValue =
+                    Convert.ToBase64String(filebytes,
+                                           Base64FormattingOptions.InsertLineBreaks);
+            }
+            return sValue;
+        }
+
+        public static void FromBase64ToFile(this string pStringBase64OfFile, string psFilePath)
+        {
+            if (!string.IsNullOrEmpty(pStringBase64OfFile))
+            {
+                byte[] filebytes = Convert.FromBase64String(pStringBase64OfFile);
+                FileStream fs = new FileStream(psFilePath,
+                                               FileMode.CreateNew,
+                                               FileAccess.Write,
+                                               FileShare.None);
+                fs.Write(filebytes, 0, filebytes.Length);
+                fs.Close();
             }
         }
 
