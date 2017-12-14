@@ -556,7 +556,7 @@ namespace SimpleHelper
         /// Check if a software is installed
         /// </summary>
         /// <returns></returns>
-        public static bool CheckIfSoftwareIsInstalled(string pSoftwareName, bool pOnlyDisplayedSoftware = false, bool pIgnoreCase)
+        public static bool CheckIfSoftwareIsInstalled(string pSoftwareName, bool pOnlyDisplayedSoftware = false, bool pIgnoreCase = true)
         {
             return GetInstalledSoftwares(pOnlyDisplayedSoftware).Any(p => string.Compare(p, pSoftwareName, pIgnoreCase) == 0);
 
