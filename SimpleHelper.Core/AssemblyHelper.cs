@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -100,10 +101,57 @@ namespace SimpleHelper.Core
         {
             get
             {
-                return Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyVersionAttribute>().Version;
+                Version version = Assembly.GetEntryAssembly()
+                                      .GetName()
+                                      .Version;
+                return $"{version.Major}.{version.Minor}.{version.Revision}";
             }
         }
-        
+        /// <summary>
+        /// Gets the assembly version major.
+        /// </summary>
+        /// <value>The assembly version major.</value>
+        public static int AssemblyVersionMajor
+        {
+            get
+            {
+                Version version = Assembly.GetEntryAssembly()
+                                      .GetName()
+                                      .Version;
+                return version.Major;
+            }
+        }
+
+        /// <summary>
+        /// Gets the assembly version minor.
+        /// </summary>
+        /// <value>The assembly version minor.</value>
+        public static int AssemblyVersionMinor
+        {
+            get
+            {
+                Version version = Assembly.GetEntryAssembly()
+                                      .GetName()
+                                      .Version;
+                return version.Minor;
+            }
+        }
+
+        /// <summary>
+        /// Gets the assembly version revision.
+        /// </summary>
+        /// <value>The assembly version revision.</value>
+        public static int AssemblyVersionRevision
+        {
+            get
+            {
+                Version version = Assembly.GetEntryAssembly()
+                                      .GetName()
+                                      .Version;
+                return version.Revision;
+            }
+        }
+
         /// <summary>
         /// Gets the current assembly.
         /// </summary>

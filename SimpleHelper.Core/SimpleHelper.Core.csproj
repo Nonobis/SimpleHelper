@@ -21,8 +21,8 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Added AssemblyHelper from SimpleHelper</PackageReleaseNotes>
-    <Version>0.0.2-alpha</Version>
+    <PackageReleaseNotes>Fix AssemblyVersion in AssemblyHelper</PackageReleaseNotes>
+    <Version>0.0.3-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
