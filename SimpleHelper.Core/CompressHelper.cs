@@ -161,7 +161,7 @@ namespace SimpleHelper
                 gz.TransfertTo(output);
             }
         }
-
+        
         /// <summary>
         /// Serializes as XML and compress.
         /// </summary>
