@@ -21,7 +21,7 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Fix AssemblyVersion in AssemblyHelper</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix namespace in SimpleHelper.Core</PackageReleaseNotes>
     <Version>0.0.4-alpha</Version>
   </PropertyGroup>
 
