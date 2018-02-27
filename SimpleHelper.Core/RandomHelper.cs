@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleHelper
+namespace SimpleHelper.Core
 {
     public static class RandomHelper
     {

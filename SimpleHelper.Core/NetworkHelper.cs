@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.NetworkInformation;
 
-namespace SimpleHelper
+namespace SimpleHelper.Core
 {
     public static class NetworkHelper
     {

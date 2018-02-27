@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace SimpleHelper
+namespace SimpleHelper.Core
 {
     #region Internal Class
 

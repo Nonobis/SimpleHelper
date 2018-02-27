@@ -3,7 +3,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace SimpleHelper
+namespace SimpleHelper.Core
 {
     public static class CompressHelper
     {

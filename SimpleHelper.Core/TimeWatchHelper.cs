@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace SimpleHelper
+namespace SimpleHelper.Core
 {
     public static class TimeWatchHelper
     {

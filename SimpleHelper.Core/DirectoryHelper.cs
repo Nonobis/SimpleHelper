@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SimpleHelper
+namespace SimpleHelper.Core
 {
     public static class DirectoryHelper
     {

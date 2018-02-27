@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace SimpleHelper
+namespace SimpleHelper.Core
 {
     /// <summary>
     /// Class for managing Semaphore

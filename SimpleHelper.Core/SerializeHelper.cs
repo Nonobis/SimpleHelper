@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
 
-namespace SimpleHelper
+namespace SimpleHelper.Core
 {
     public static class SerializeHelper<T>
     {
