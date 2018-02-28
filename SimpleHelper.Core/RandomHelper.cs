@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace SimpleHelper.Core
 {
@@ -28,5 +29,35 @@ namespace SimpleHelper.Core
                 return getrandom.Next(min, max);
             }
         }
+
+        /// <summary>
+        /// Gets the random doube number.
+        /// </summary>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        /// <returns></returns>
+        public static double GetRandomDouble(double min, double max)
+        {
+            lock (syncLock)
+            {
+                return getrandom.NextDouble() * (max - min) + min;
+            }
+        }
+				
+        /// <summary>
+        /// Gets the random string.
+        /// </summary>
+        /// <param name="length">The length.</param>
+        /// <returns></returns>
+		public static string RandomString(int length)
+		{
+			lock (syncLock)
+			{
+				const string pool = "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+				var chars = Enumerable.Range(0, length)
+					.Select(x => pool[getrandom.Next(0, pool.Length)]);
+				return new string(chars.ToArray());
+			}
+		}
     }
 }
