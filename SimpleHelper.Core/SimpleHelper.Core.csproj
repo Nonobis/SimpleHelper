@@ -21,7 +21,7 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>Fix namespace in SimpleHelper.Core</PackageReleaseNotes>
+    <PackageReleaseNotes>Add new function in RandomHelper</PackageReleaseNotes>
     <Version>0.0.5-alpha</Version>
   </PropertyGroup>
 

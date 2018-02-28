@@ -17,8 +17,8 @@
     <owners>Arnaud Dartois</owners>
     <projectUrl>https://github.com/Nonobis/SimpleHelper</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<releaseNotes>LocalComputerHelper : Add lot of new methods</releaseNotes>
-		<copyright>Copyright, Arnaud Dartois 2016-2017</copyright>
+		<releaseNotes>Add new function in RandomHelper</releaseNotes>
+		<copyright>Copyright, Arnaud Dartois 2016-2018</copyright>
 		<tags>Helper Library Collection</tags>
 	</metadata>
   <files>
