@@ -22,7 +22,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>Fix namespace in SimpleHelper.Core</PackageReleaseNotes>
-    <Version>0.0.4-alpha</Version>
+    <Version>0.0.5-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
