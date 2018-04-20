@@ -86,6 +86,7 @@ namespace SimpleHelper.Core
         /// </summary>
         /// <param name="pSource">The source.</param>
         /// <param name="pTarget">The target.</param>
+        /// <param name="pDeleteExistingTarget"></param>
         public static bool CopyFilesRecursively(string pSource, string pTarget, bool pDeleteExistingTarget)
         {
             return CopyFilesRecursively(new DirectoryInfo(pSource), new DirectoryInfo(pTarget), pDeleteExistingTarget);
@@ -96,6 +97,7 @@ namespace SimpleHelper.Core
         /// </summary>
         /// <param name="pSource">The source.</param>
         /// <param name="pTarget">The target.</param>
+        /// <param name="pDeleteExistingTarget"></param>
         public static bool CopyFilesRecursively(DirectoryInfo pSource, DirectoryInfo pTarget, bool pDeleteExistingTarget)
         {
             try
