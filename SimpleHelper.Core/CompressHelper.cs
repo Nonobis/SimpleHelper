@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using ICSharpCode.SharpZipLib.Zip;
+using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Xml.Serialization;
+using System;
 
 namespace SimpleHelper.Core
 {
@@ -88,6 +90,87 @@ namespace SimpleHelper.Core
         }
 
         /// <summary>
+        /// Unzips to folder.
+        /// </summary>
+        /// <param name="filepath">The filepath.</param>
+        /// <param name="outputDirectory">The output directory.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">
+        /// </exception>
+        public static bool UnzipToFolder(string filepath, string outputDirectory)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(outputDirectory))
+                {
+                    throw new Exception($"Zipped file not specified");
+                }
+
+                if (!string.IsNullOrEmpty(outputDirectory))
+                {
+                    throw new Exception($"Output Folder not specified");
+                }
+
+                if (File.Exists(filepath))
+                    throw new Exception($"File {filepath} not found");
+
+                if (!Directory.Exists(outputDirectory))
+                    Directory.CreateDirectory(outputDirectory);
+
+                // Unzip all content to target folder
+                using (ZipInputStream s = new ZipInputStream(File.OpenRead(filepath)))
+                {
+
+                    ZipEntry theEntry;
+                    while ((theEntry = s.GetNextEntry()) != null)
+                    {
+                        string directoryPath = Path.Combine(outputDirectory, Path.GetDirectoryName(theEntry.Name));
+                        string fileName = Path.GetFileName(theEntry.Name);
+
+                        // create directory
+                        if (!string.IsNullOrEmpty(directoryPath))
+                        {
+                            if (!Directory.Exists(directoryPath))
+                                Directory.CreateDirectory(directoryPath);
+                        }
+
+                        if (!string.IsNullOrEmpty(fileName))
+                        {
+                            string filePath = Path.Combine(directoryPath, theEntry.Name);
+
+                            if (File.Exists(filePath))
+                                File.Delete(filePath);
+
+                            using (FileStream streamWriter = File.Create(filePath))
+                            {
+                                int size = 2048;
+                                byte[] data = new byte[2048];
+                                while (true)
+                                {
+                                    size = s.Read(data, 0, data.Length);
+                                    if (size > 0)
+                                    {
+                                        streamWriter.Write(data, 0, size);
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        /// <summary>
         /// Compresses the memory byte array.
         /// </summary>
         /// <param name="raw">The raw.</param>
@@ -161,7 +244,7 @@ namespace SimpleHelper.Core
                 gz.TransfertTo(output);
             }
         }
-        
+
         /// <summary>
         /// Serializes as XML and compress.
         /// </summary>

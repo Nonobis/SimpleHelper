@@ -22,11 +22,12 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>Add new function in RandomHelper</PackageReleaseNotes>
-    <Version>0.0.5-alpha</Version>
+    <Version>0.0.6-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuGet.CommandLine" Version="4.5.1" />
+    <PackageReference Include="NuGet.CommandLine" Version="4.6.2" />
+    <PackageReference Include="SharpZipLib.NETStandard" Version="1.0.7" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
     <PackageReference Include="System.IO" Version="4.3.0" />
     <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
@@ -39,7 +40,7 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.0-preview2-26406-04" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
 
