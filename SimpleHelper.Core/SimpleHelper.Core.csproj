@@ -24,6 +24,7 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <Version>0.0.6</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/Nonobis/SimpleHelper/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>
