@@ -22,7 +22,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Version>0.0.6</Version>
+    <Version>0.0.7</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/Nonobis/SimpleHelper/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
