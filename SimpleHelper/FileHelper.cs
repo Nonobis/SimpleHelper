@@ -87,6 +87,7 @@ namespace SimpleHelper
         /// </summary>
         /// <param name="pSource">The source.</param>
         /// <param name="pTarget">The target.</param>
+        /// <param name="pDeleteExistingTarget"></param>
         public static bool CopyFilesRecursively(string pSource, string pTarget, bool pDeleteExistingTarget)
         {
             return CopyFilesRecursively(new DirectoryInfo(pSource), new DirectoryInfo(pTarget), pDeleteExistingTarget);
@@ -97,20 +98,21 @@ namespace SimpleHelper
         /// </summary>
         /// <param name="pSource">The source.</param>
         /// <param name="pTarget">The target.</param>
+        /// <param name="pDeleteExistingTarget"></param>
         public static bool CopyFilesRecursively(DirectoryInfo pSource, DirectoryInfo pTarget, bool pDeleteExistingTarget)
         {
             try
             {
-                foreach (DirectoryInfo dir in pSource.GetDirectories())
+                foreach (var dir in pSource.GetDirectories())
                 {
-                    DirectoryInfo targetSubDirectory = pTarget.CreateSubdirectory(dir.Name);
+                    var targetSubDirectory = pTarget.CreateSubdirectory(dir.Name);
                     CopyFilesRecursively(dir, targetSubDirectory, pDeleteExistingTarget);
                 }
 
                 Parallel.ForEach(pSource.GetFiles(),
                 filePath =>
                 {
-                    Task task = Task.Factory.StartNew(() =>
+                    Task.Factory.StartNew(() =>
                     {
                         if (File.Exists(Path.Combine(pTarget.FullName, filePath.Name)))
                             File.Delete(Path.Combine(pTarget.FullName, filePath.Name));
@@ -131,35 +133,35 @@ namespace SimpleHelper
         {
             string sValue = string.Empty;
             var oFile = new FileInfo(pFilePath);
-            if (oFile != null && oFile.Exists)
-            {
-                FileStream fs = new FileStream(oFile.FullName,
-                                               FileMode.Open,
-                                               FileAccess.Read);
-                byte[] filebytes = new byte[fs.Length];
-                fs.Read(filebytes, 0, Convert.ToInt32(fs.Length));
-                sValue =
-                    Convert.ToBase64String(filebytes,
-                                           Base64FormattingOptions.InsertLineBreaks);
-            }
+            if (!oFile.Exists)
+                return sValue;
+
+            FileStream fs = new FileStream(oFile.FullName,
+                FileMode.Open,
+                FileAccess.Read);
+            byte[] filebytes = new byte[fs.Length];
+            fs.Read(filebytes, 0, Convert.ToInt32(fs.Length));
+            sValue =
+                Convert.ToBase64String(filebytes,
+                    Base64FormattingOptions.InsertLineBreaks);
             return sValue;
         }
 
         public static void FromBase64ToFile(string pData, string psFilePath, bool pDeleteIfExisting)
         {
-            if (!string.IsNullOrEmpty(pData) )
-            {
-                if (File.Exists(pData) && pDeleteIfExisting)
-                    File.Delete(psFilePath);
+            if (string.IsNullOrEmpty(pData))
+                return;
 
-                byte[] filebytes = Convert.FromBase64String(pData);
-                using (FileStream fs = new FileStream(psFilePath,
-                                               FileMode.CreateNew,
-                                               FileAccess.Write,
-                                               FileShare.None))
-                {
-                    fs.Write(filebytes, 0, filebytes.Length);
-                }
+            if (File.Exists(pData) && pDeleteIfExisting)
+                File.Delete(psFilePath);
+
+            byte[] filebytes = Convert.FromBase64String(pData);
+            using (var fs = new FileStream(psFilePath,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None))
+            {
+                fs.Write(filebytes, 0, filebytes.Length);
             }
         }
 
@@ -168,12 +170,12 @@ namespace SimpleHelper
         /// </summary>
         /// <param name="psFile">The file path.</param>
         /// <returns></returns>
-        public static long GetCRCFile(string psFile)
+        public static long GetCrcFile(string psFile)
         {
             using (var streamFile = new FileStream(psFile, FileMode.Open))
             {
                 var crcFile = new CRC32();
-                return crcFile.GetCrc32(streamFile as Stream);
+                return crcFile.GetCrc32(streamFile);
             }
         }
     }
