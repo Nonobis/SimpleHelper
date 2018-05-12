@@ -1,16 +1,17 @@
-﻿using ICSharpCode.SharpZipLib.Zip;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Xml.Serialization;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SimpleHelper.Core
 {
     public static class CompressHelper
     {
         /// <summary>
-        /// Gs the zip.
+        /// Compress the string with GZIP.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns></returns>
@@ -48,7 +49,7 @@ namespace SimpleHelper.Core
         }
 
         /// <summary>
-        /// Uns the G zip.
+        /// Uncompress the string with GZIP.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns></returns>
@@ -95,80 +96,80 @@ namespace SimpleHelper.Core
         /// <param name="filepath">The filepath.</param>
         /// <param name="outputDirectory">The output directory.</param>
         /// <returns></returns>
-        /// <exception cref="Exception">
-        /// </exception>
         public static bool UnzipToFolder(string filepath, string outputDirectory)
         {
-            try
-            {
-                if (!string.IsNullOrEmpty(outputDirectory))
-                {
-                    throw new Exception($"Zipped file not specified");
-                }
-
-                if (!string.IsNullOrEmpty(outputDirectory))
-                {
-                    throw new Exception($"Output Folder not specified");
-                }
-
-                if (File.Exists(filepath))
-                    throw new Exception($"File {filepath} not found");
-
-                if (!Directory.Exists(outputDirectory))
-                    Directory.CreateDirectory(outputDirectory);
-
-                // Unzip all content to target folder
-                using (ZipInputStream s = new ZipInputStream(File.OpenRead(filepath)))
-                {
-
-                    ZipEntry theEntry;
-                    while ((theEntry = s.GetNextEntry()) != null)
-                    {
-                        string directoryPath = Path.Combine(outputDirectory, Path.GetDirectoryName(theEntry.Name));
-                        string fileName = Path.GetFileName(theEntry.Name);
-
-                        // create directory
-                        if (!string.IsNullOrEmpty(directoryPath))
-                        {
-                            if (!Directory.Exists(directoryPath))
-                                Directory.CreateDirectory(directoryPath);
-                        }
-
-                        if (!string.IsNullOrEmpty(fileName))
-                        {
-                            string filePath = Path.Combine(directoryPath, theEntry.Name);
-
-                            if (File.Exists(filePath))
-                                File.Delete(filePath);
-
-                            using (FileStream streamWriter = File.Create(filePath))
-                            {
-                                int size = 2048;
-                                byte[] data = new byte[2048];
-                                while (true)
-                                {
-                                    size = s.Read(data, 0, data.Length);
-                                    if (size > 0)
-                                    {
-                                        streamWriter.Write(data, 0, size);
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return DecompressToFolder(filepath, outputDirectory);
         }
 
+        /// <summary>
+        /// Unzips to folder.
+        /// </summary>
+        /// <param name="filepath">The filepath.</param>
+        /// <param name="outputDirectory">The output directory.</param>
+        /// <param name="excludeFiles">The exclude files.</param>
+        /// <returns></returns>
+        public static bool UnzipToFolder(string filepath, string outputDirectory, List<string> excludeFiles)
+        {
+            return UnzipToFolder(filepath, outputDirectory);
+        }
+
+        /// <summary>
+        /// Decompresses to folder.
+        /// </summary>
+        /// <param name="filepath">The filepath.</param>
+        /// <param name="outputDirectory">The output directory.</param>
+        /// <param name="excludeFiles">The exclude files.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">
+        /// </exception>
+        private static bool DecompressToFolder(string filepath, string outputDirectory, List<string> excludeFiles = null)
+        {
+            if (!string.IsNullOrEmpty(filepath))
+            {
+                throw new Exception($"Zipped file not specified");
+            }
+
+            if (!string.IsNullOrEmpty(outputDirectory))
+            {
+                throw new Exception($"Output Folder not specified");
+            }
+
+            if (File.Exists(filepath))
+                throw new Exception($"File {filepath} not found");
+
+            if (!Directory.Exists(outputDirectory))
+                Directory.CreateDirectory(outputDirectory);
+
+            using (ZipArchive za = System.IO.Compression.ZipFile.OpenRead(filepath))
+            {
+                foreach (var zipArchiveEntry in za.Entries)
+                {
+                    if (zipArchiveEntry == null)
+                        continue;
+
+                    if (excludeFiles != null && excludeFiles.Any(p => p.ToLower() == zipArchiveEntry.Name.ToLower()))
+                        continue;
+
+                    var directoryPath = Path.Combine(outputDirectory, Path.GetDirectoryName(zipArchiveEntry.Name));
+
+                    // create directory
+                    if (!string.IsNullOrEmpty(directoryPath))
+                    {
+                        if (!Directory.Exists(directoryPath))
+                            Directory.CreateDirectory(directoryPath);
+                    }
+
+                    var filePath = Path.Combine(directoryPath, zipArchiveEntry.Name);
+
+                    if (File.Exists(filePath))
+                        File.Delete(filePath);
+
+                    zipArchiveEntry.ExtractToFile(filePath);
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Compresses the memory byte array.
