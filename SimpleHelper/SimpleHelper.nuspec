@@ -23,7 +23,23 @@
 		<tags>Helper Library Collection</tags>
 	</metadata>
   <files>
-    <file src="*.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
-    <file src="**\*.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net45\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net451\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net451\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net452\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net452\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net46\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net46\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net461\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net461\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net462\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net462\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net47\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net47\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net471\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net471\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="SimpleHelper.*" target="lib\net472\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
+    <file src="**\SimpleHelper.*" target="lib\net472\" exclude="*.pdb;*.nupkg;*.vshost.*"/>
   </files>
 </package>

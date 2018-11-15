@@ -11,7 +11,6 @@ namespace SimpleHelper
     /// </summary>
     public static class AssemblyHelper
     {
-        #region Public Properties
 
         /// <summary>
         /// Gets the assembly company.
@@ -30,25 +29,6 @@ namespace SimpleHelper
                 }
                 // If there is a Company attribute, return its value
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
-            }
-        }
-
-        /// <summary>
-        /// Determines whether this instance is debug.
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsDebug
-        {
-            get
-            {
-                var customAttributes =
-                    Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(DebuggableAttribute), false);
-                if ((customAttributes.Length == 1))
-                {
-                    var attribute = customAttributes[0] as DebuggableAttribute;
-                    return attribute != null && (attribute.IsJITOptimizerDisabled && attribute.IsJITTrackingEnabled);
-                }
-                return false;
             }
         }
 
@@ -89,19 +69,6 @@ namespace SimpleHelper
                 }
                 // If there is a Description attribute, return its value
                 return ((AssemblyDescriptionAttribute)attributes[0]).Description;
-            }
-        }
-
-        /// <summary>
-        /// Gets the get referenced assembly.
-        /// </summary>
-        /// <value>
-        /// The get referenced assembly.
-        /// </value>
-        public static List<AssemblyName> GetReferencedAssembly
-        {
-            get {
-                return Assembly.GetCallingAssembly().GetReferencedAssemblies().ToList();
             }
         }
 
@@ -241,6 +208,35 @@ namespace SimpleHelper
             }
         }
 
-        #endregion Public Properties
+        /// <summary>
+        /// Gets the get referenced assembly.
+        /// </summary>
+        /// <value>The get referenced assembly.</value>
+        public static List<AssemblyName> GetReferencedAssembly
+        {
+            get
+            {
+                return Assembly.GetCallingAssembly().GetReferencedAssemblies().ToList();
+            }
+        }
+
+        /// <summary>
+        /// Determines whether this instance is debug.
+        /// </summary>
+        /// <value><c>true</c> if this instance is debug; otherwise, <c>false</c>.</value>
+        public static bool IsDebug
+        {
+            get
+            {
+                var customAttributes =
+                    Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(DebuggableAttribute), false);
+                if ((customAttributes.Length == 1))
+                {
+                    var attribute = customAttributes[0] as DebuggableAttribute;
+                    return attribute != null && (attribute.IsJITOptimizerDisabled && attribute.IsJITTrackingEnabled);
+                }
+                return false;
+            }
+        }
     }
 }

@@ -2,6 +2,9 @@
 
 namespace SimpleHelper
 {
+    /// <summary>
+    /// Class DirectoryHelper.
+    /// </summary>
     public static class DirectoryHelper
     {
         /// <summary>

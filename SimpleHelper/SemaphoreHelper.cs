@@ -5,19 +5,32 @@ namespace SimpleHelper
 {
     /// <summary>
     /// Class for managing Semaphore
+    /// Implements the <see cref="System.IDisposable" />
     /// </summary>
+    /// <seealso cref="System.IDisposable" />
     public class SemaphoreHelper : IDisposable
     {
+        /// <summary>
+        /// The mut
+        /// </summary>
         readonly Mutex _mut;
+        /// <summary>
+        /// The count
+        /// </summary>
         int _count;
+        /// <summary>
+        /// The maximum
+        /// </summary>
         readonly int _max;
+        /// <summary>
+        /// The latch
+        /// </summary>
         readonly ManualResetEvent _latch;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SemaphoreHelper"/> class.
+        /// Initializes a new instance of the <see cref="SemaphoreHelper" /> class.
         /// </summary>
-        /// <param name="maxParallelThreadCount">The max parallel thread count</param>                
-        /// <remarks></remarks>
+        /// <param name="maxParallelThreadCount">The max parallel thread count</param>
         public SemaphoreHelper(int maxParallelThreadCount)
         {
             _mut = new Mutex();
@@ -29,7 +42,6 @@ namespace SimpleHelper
         /// <summary>
         /// Gets the ticket
         /// </summary>
-        /// <remarks></remarks>
         public void GetTicket()
         {
             while (true)
@@ -49,7 +61,6 @@ namespace SimpleHelper
         /// <summary>
         /// Releases the ticket
         /// </summary>
-        /// <remarks></remarks>
         public void ReleaseTicket()
         {
             _mut.WaitOne();
@@ -73,24 +84,21 @@ namespace SimpleHelper
             if (_latch != null)
             {
                 _latch.Close();
-                ((IDisposable)_latch).Dispose();
+                _latch.Dispose();
             }
 
             if (_mut != null)
             {
                 _mut.Close();
-                ((IDisposable)_mut).Dispose();
+                _mut.Dispose();
             }
-
             GC.SuppressFinalize(this);
         }
 
         /// <summary>
         /// Gets the running thread count.
         /// </summary>
-        /// <value>
-        /// The running thread count.
-        /// </value>
+        /// <value>The running thread count.</value>
         public int RunningThreadCount
         {
             get

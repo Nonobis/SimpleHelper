@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace SimpleHelper
 {
+    /// <summary>
+    /// Class RandomHelper.
+    /// </summary>
     public static class RandomHelper
     {
         /// <summary>
@@ -16,11 +19,25 @@ namespace SimpleHelper
         static readonly object syncLock = new object();
 
         /// <summary>
+        /// Gets the random doube number.
+        /// </summary>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        /// <returns>System.Double.</returns>
+        public static double GetRandomDouble(double min, double max)
+        {
+            lock (syncLock)
+            {
+                return getrandom.NextDouble() * (max - min) + min;
+            }
+        }
+
+        /// <summary>
         /// Gets the random number.
         /// </summary>
         /// <param name="min">The minimum.</param>
         /// <param name="max">The maximum.</param>
-        /// <returns></returns>
+        /// <returns>System.Int32.</returns>
         public static int GetRandomNumber(int min, int max)
         {
             lock (syncLock)
@@ -29,27 +46,12 @@ namespace SimpleHelper
                 return getrandom.Next(min, max);
             }
         }
-
-        /// <summary>
-        /// Gets the random doube number.
-        /// </summary>
-        /// <param name="min">The minimum.</param>
-        /// <param name="max">The maximum.</param>
-        /// <returns></returns>
-        public static double GetRandomDouble(double min, double max)
-        {
-            lock (syncLock)
-            {
-                return getrandom.NextDouble() * (max - min) + min;
-            }
-        }
-		
         /// <summary>
         /// Gets the random string.
         /// </summary>
         /// <param name="length">The length.</param>
-        /// <returns></returns>
-		public static string RandomString(int length)
+        /// <returns>System.String.</returns>
+        public static string RandomString(int length)
 		{
 			lock (syncLock)
 			{

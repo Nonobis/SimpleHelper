@@ -16,188 +16,59 @@ namespace SimpleHelper
     /// </summary>
     public static class LocalComputerHelper
     {
-        #region Public Methods
 
         /// <summary>
-        /// Gets the physical processor.
+        /// Check if a software is installed
         /// </summary>
-        /// <returns></returns>
-        public static int GetPhysicalProcessor()
+        /// <param name="pSoftwareName">Name of the p software.</param>
+        /// <param name="pOnlyDisplayedSoftware">if set to <c>true</c> [p only displayed software].</param>
+        /// <param name="pIgnoreCase">if set to <c>true</c> [p ignore case].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool CheckIfSoftwareIsInstalled(string pSoftwareName, bool pOnlyDisplayedSoftware = false, bool pIgnoreCase = true)
         {
-            return new ManagementObjectSearcher("Select NumberOfCores from Win32_Processor").Get().Cast<ManagementBaseObject>().Sum(item => Convert.ToInt32(item.GetPropertyValue("NumberOfCores")));
+            return GetInstalledSoftwares(pOnlyDisplayedSoftware).Any(p => string.Compare(p, pSoftwareName, pIgnoreCase) == 0);
+
         }
 
         /// <summary>
-        /// Gets the name of the localized administrators groups account.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetLocalizedAdministratorsGroupsAccountName()
-        {
-            string adminsSid = new SecurityIdentifier("S-1-5-32-544").ToString();
-            string localizedAdmin = new SecurityIdentifier(adminsSid).Translate(typeof(NTAccount)).ToString();
-            localizedAdmin = localizedAdmin.Replace(@"BUILTIN\", "");
-            return localizedAdmin;
-        }
-
-        /// <summary>
-        /// Gets the name of the localized system admin  account.
+        /// Retrieving System Account Name.
         /// </summary>
         /// <returns>System.String.</returns>
-        public static string GetLocalizedSystemAccountName()
-        {
-            string sid = new SecurityIdentifier(WellKnownSidType.LocalSystemSid, null).ToString();
-            string localizedsid = new SecurityIdentifier(sid).Translate(typeof(NTAccount)).ToString();
-            return localizedsid.Replace(@"BUILTIN\", "").Replace("AUTORITE NT", "");
-        }
-
-        /// <summary>
-        /// Gets the localized everyone account.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetLocalizedEveryoneAccount()
-        {
-            string sid = new SecurityIdentifier(WellKnownSidType.WorldSid, null).ToString();
-            string localizedsid = new SecurityIdentifier(sid).Translate(typeof(NTAccount)).ToString();
-            return localizedsid.Replace(@"BUILTIN\", "").Replace("AUTORITE NT", "");
-
-        }
-
-        /// <summary>
-        /// Get local computer Windows License Key
-        /// </summary>
-        /// <returns></returns>
-        public static string GetWindowsProductKey()
-        {
-            if (Environment.OSVersion.Platform == PlatformID.Unix
-                || Environment.OSVersion.Platform == PlatformID.MacOSX
-                || Environment.OSVersion.Platform == PlatformID.WinCE
-                || Environment.OSVersion.Platform == PlatformID.Xbox)
-                return string.Empty;
-
-            RegistryKey localKey;
-            if (Environment.Is64BitOperatingSystem)
-            {
-                localKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
-            }
-            else
-            {
-                localKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
-            }
-            var value = (byte[])localKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion")?.GetValue("DigitalProductId");
-            var digitalProductId = value;
-            var isWin8OrUp =
-                (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 2)
-                ||
-                (Environment.OSVersion.Version.Major > 6);
-            var productKey = isWin8OrUp ? DecodeProductKeyWin8AndUp(digitalProductId) : DecodeProductKey(digitalProductId);
-            localKey.Close();
-            return productKey;
-
-        }
-
-        /// <summary>
-        /// Retrieving Processor Id.
-        /// </summary>
-        /// <returns></returns>
-        /// 
-        public static string GetProcessorId()
+        public static string GetAccountName()
         {
 
-            ManagementClass mc = new ManagementClass("win32_processor");
-            ManagementObjectCollection moc = mc.GetInstances();
-            string id = string.Empty;
-            foreach (var o in moc)
-            {
-                var mo = (ManagementObject) o;
-
-                id = mo.Properties["processorID"].Value.ToString();
-                break;
-            }
-            return id;
-
-        }
-
-        /// <summary>
-        /// Retrieving HDD Serial No.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetHddSerialNo()
-        {
-            ManagementClass mangnmt = new ManagementClass("Win32_LogicalDisk");
-            ManagementObjectCollection mcol = mangnmt.GetInstances();
-            string result = "";
-            foreach (var o in mcol)
-            {
-                var strt = (ManagementObject) o;
-                result += Convert.ToString(strt["VolumeSerialNumber"]);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Retrieving System MAC Address.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetMacAddress()
-        {
-            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-            ManagementObjectCollection moc = mc.GetInstances();
-            string macAddress = string.Empty;
-            foreach (var o in moc)
-            {
-                var mo = (ManagementObject) o;
-                if (macAddress == string.Empty)
-                {
-                    if ((bool)mo["IPEnabled"]) macAddress = mo["MacAddress"].ToString();
-                }
-                mo.Dispose();
-            }
-
-            macAddress = macAddress.Replace(":", "");
-            return macAddress;
-        }
-
-        /// <summary>
-        /// Retrieving Motherboard Manufacturer.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetBoardMaker()
-        {
-
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
-
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_UserAccount");
             foreach (var o in searcher.Get())
             {
-                var wmi = (ManagementObject) o;
+                var wmi = (ManagementObject)o;
                 try
                 {
-                    return wmi.GetPropertyValue("Manufacturer").ToString();
+                    return wmi.GetPropertyValue("Name").ToString();
                 }
                 catch
                 {
                     // ignored
                 }
             }
-
-            return "Board Maker: Unknown";
+            return "User Account Name: Unknown";
 
         }
 
         /// <summary>
-        /// Retrieving Motherboard Product Id.
+        /// Retrieving BIOS Caption.
         /// </summary>
-        /// <returns></returns>
-        public static string GetBoardProductId()
+        /// <returns>System.String.</returns>
+        public static string GetBioScaption()
         {
 
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
 
             foreach (var o in searcher.Get())
             {
-                var wmi = (ManagementObject) o;
+                var wmi = (ManagementObject)o;
                 try
                 {
-                    return wmi.GetPropertyValue("Product").ToString();
+                    return wmi.GetPropertyValue("Caption").ToString();
 
                 }
                 catch
@@ -205,42 +76,13 @@ namespace SimpleHelper
                     // ignored
                 }
             }
-
-            return "Product: Unknown";
-
-        }
-
-        /// <summary>
-        /// Retrieving CD-DVD Drive Path.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetCdRomDrive()
-        {
-
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_CDROMDrive");
-
-            foreach (var o in searcher.Get())
-            {
-                var wmi = (ManagementObject) o;
-                try
-                {
-                    return wmi.GetPropertyValue("Drive").ToString();
-
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-
-            return "CD ROM Drive Letter: Unknown";
-
+            return "BIOS Caption: Unknown";
         }
 
         /// <summary>
         /// Retrieving BIOS Maker.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         public static string GetBioSmaker()
         {
 
@@ -248,7 +90,7 @@ namespace SimpleHelper
 
             foreach (var o in searcher.Get())
             {
-                var wmi = (ManagementObject) o;
+                var wmi = (ManagementObject)o;
                 try
                 {
                     return wmi.GetPropertyValue("Manufacturer").ToString();
@@ -267,7 +109,7 @@ namespace SimpleHelper
         /// <summary>
         /// Retrieving BIOS Serial No.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         public static string GetBioSserNo()
         {
 
@@ -275,7 +117,7 @@ namespace SimpleHelper
 
             foreach (var o in searcher.Get())
             {
-                var wmi = (ManagementObject) o;
+                var wmi = (ManagementObject)o;
                 try
                 {
                     return wmi.GetPropertyValue("SerialNumber").ToString();
@@ -291,20 +133,46 @@ namespace SimpleHelper
         }
 
         /// <summary>
-        /// Retrieving BIOS Caption.
+        /// Retrieving Motherboard Manufacturer.
         /// </summary>
-        /// <returns></returns>
-        public static string GetBioScaption()
+        /// <returns>System.String.</returns>
+        public static string GetBoardMaker()
         {
 
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
 
             foreach (var o in searcher.Get())
             {
-                var wmi = (ManagementObject) o;
+                var wmi = (ManagementObject)o;
                 try
                 {
-                    return wmi.GetPropertyValue("Caption").ToString();
+                    return wmi.GetPropertyValue("Manufacturer").ToString();
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+
+            return "Board Maker: Unknown";
+
+        }
+
+        /// <summary>
+        /// Retrieving Motherboard Product Id.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetBoardProductId()
+        {
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BaseBoard");
+
+            foreach (var o in searcher.Get())
+            {
+                var wmi = (ManagementObject)o;
+                try
+                {
+                    return wmi.GetPropertyValue("Product").ToString();
 
                 }
                 catch
@@ -312,75 +180,83 @@ namespace SimpleHelper
                     // ignored
                 }
             }
-            return "BIOS Caption: Unknown";
+
+            return "Product: Unknown";
+
         }
 
         /// <summary>
-        /// Retrieving System Account Name.
+        /// Retrieving CD-DVD Drive Path.
         /// </summary>
-        /// <returns></returns>
-        public static string GetAccountName()
+        /// <returns>System.String.</returns>
+        public static string GetCdRomDrive()
         {
 
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_UserAccount");
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_CDROMDrive");
+
             foreach (var o in searcher.Get())
             {
-                var wmi = (ManagementObject) o;
+                var wmi = (ManagementObject)o;
                 try
                 {
-                    return wmi.GetPropertyValue("Name").ToString();
+                    return wmi.GetPropertyValue("Drive").ToString();
+
                 }
                 catch
                 {
                     // ignored
                 }
             }
-            return "User Account Name: Unknown";
+
+            return "CD ROM Drive Letter: Unknown";
 
         }
 
         /// <summary>
-        /// Retrieving Physical Ram Memory.
+        /// Retrieving Computer Name.
         /// </summary>
-        /// <returns></returns>
-        public static string GetPhysicalMemory()
+        /// <returns>System.String.</returns>
+        public static string GetComputerName()
         {
-            ManagementScope oMs = new ManagementScope();
-            ObjectQuery oQuery = new ObjectQuery("SELECT Capacity FROM Win32_PhysicalMemory");
-            ManagementObjectSearcher oSearcher = new ManagementObjectSearcher(oMs, oQuery);
-            ManagementObjectCollection oCollection = oSearcher.Get();
-
-            long memSize = 0;
-
-            // In case more than one Memory sticks are installed
-            foreach (var o in oCollection)
+            ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
+            ManagementObjectCollection moc = mc.GetInstances();
+            string info = string.Empty;
+            foreach (var o in moc)
             {
-                var obj = (ManagementObject) o;
-                var mCap = Convert.ToInt64(obj["Capacity"]);
-                memSize += mCap;
+                var mo = (ManagementObject)o;
+                info = (string)mo["Name"];
             }
-            memSize = (memSize / 1024) / 1024;
-            return memSize + "MB";
+            return info;
         }
 
         /// <summary>
-        /// Retrieving No of Ram Slot on Motherboard.
+        /// method to retrieve the CPU's current
+        /// clock speed using the WMI class
         /// </summary>
-        /// <returns></returns>
-        public static string GetNoRamSlots()
+        /// <returns>Clock speed</returns>
+        public static int GetCpuCurrentClockSpeed()
         {
+            var cpuClockSpeed = 0;
 
-            int memSlots = 0;
-            ManagementScope oMs = new ManagementScope();
-            ObjectQuery oQuery2 = new ObjectQuery("SELECT MemoryDevices FROM Win32_PhysicalMemoryArray");
-            ManagementObjectSearcher oSearcher2 = new ManagementObjectSearcher(oMs, oQuery2);
-            ManagementObjectCollection oCollection2 = oSearcher2.Get();
-            foreach (var o in oCollection2)
+            //create an instance of the Managemnet class with the
+            //Win32_Processor class
+            ManagementClass mgmt = new ManagementClass("Win32_Processor");
+
+            //create a ManagementObjectCollection to loop through
+            ManagementObjectCollection objCol = mgmt.GetInstances();
+
+            //start our loop for all processors found
+            foreach (var o in objCol)
             {
-                var obj = (ManagementObject) o;
-                memSlots = Convert.ToInt32(obj["MemoryDevices"]);
+                var obj = (ManagementObject)o;
+                if (cpuClockSpeed == 0)
+                {
+                    // only return cpuStatus from first CPU
+                    cpuClockSpeed = Convert.ToInt32(obj.Properties["CurrentClockSpeed"].Value.ToString());
+                }
             }
-            return memSlots.ToString();
+            //return the status
+            return cpuClockSpeed;
         }
 
         //Get CPU Temprature.
@@ -403,7 +279,7 @@ namespace SimpleHelper
             //start our loop for all processors found
             foreach (var o in objCol)
             {
-                var obj = (ManagementObject) o;
+                var obj = (ManagementObject)o;
                 if (cpuMan == string.Empty)
                 {
                     // only return manufacturer from first CPU
@@ -414,33 +290,48 @@ namespace SimpleHelper
         }
 
         /// <summary>
-        /// method to retrieve the CPU's current
-        /// clock speed using the WMI class
+        /// Retrieve CPU Speed.
         /// </summary>
-        /// <returns>Clock speed</returns>
-        public static int GetCpuCurrentClockSpeed()
+        /// <returns>System.Nullable&lt;System.Double&gt;.</returns>
+        public static double? GetCpuSpeedInGHz()
         {
-            var cpuClockSpeed = 0;
-
-            //create an instance of the Managemnet class with the
-            //Win32_Processor class
-            ManagementClass mgmt = new ManagementClass("Win32_Processor");
-
-            //create a ManagementObjectCollection to loop through
-            ManagementObjectCollection objCol = mgmt.GetInstances();
-
-            //start our loop for all processors found
-            foreach (var o in objCol)
+            double? gHz = null;
+            using (ManagementClass mc = new ManagementClass("Win32_Processor"))
             {
-                var obj = (ManagementObject) o;
-                if (cpuClockSpeed == 0)
+                foreach (var o in mc.GetInstances())
                 {
-                    // only return cpuStatus from first CPU
-                    cpuClockSpeed = Convert.ToInt32(obj.Properties["CurrentClockSpeed"].Value.ToString());
+                    var mo = (ManagementObject)o;
+                    gHz = 0.001 * (uint)mo.Properties["CurrentClockSpeed"].Value;
+                    break;
                 }
             }
-            //return the status
-            return cpuClockSpeed;
+            return gHz;
+        }
+
+        /// <summary>
+        /// Retrieving Current Language
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetCurrentLanguage()
+        {
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
+
+            foreach (var o in searcher.Get())
+            {
+                var wmi = (ManagementObject)o;
+                try
+                {
+                    return wmi.GetPropertyValue("CurrentLanguage").ToString();
+
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+            return "BIOS Maker: Unknown";
+
         }
 
         /// <summary>
@@ -462,7 +353,7 @@ namespace SimpleHelper
             //loop through all the objects we find
             foreach (var o in objCol)
             {
-                var obj = (ManagementObject) o;
+                var obj = (ManagementObject)o;
                 if (gateway == string.Empty)  // only return MAC Address from first card
                 {
                     //grab the value from the first network adapter we find
@@ -488,120 +379,27 @@ namespace SimpleHelper
         }
 
         /// <summary>
-        /// Retrieve CPU Speed.
+        /// Retrieving HDD Serial No.
         /// </summary>
-        /// <returns></returns>
-        public static double? GetCpuSpeedInGHz()
+        /// <returns>System.String.</returns>
+        public static string GetHddSerialNo()
         {
-            double? gHz = null;
-            using (ManagementClass mc = new ManagementClass("Win32_Processor"))
+            ManagementClass mangnmt = new ManagementClass("Win32_LogicalDisk");
+            ManagementObjectCollection mcol = mangnmt.GetInstances();
+            string result = "";
+            foreach (var o in mcol)
             {
-                foreach (var o in mc.GetInstances())
-                {
-                    var mo = (ManagementObject) o;
-                    gHz = 0.001 * (uint)mo.Properties["CurrentClockSpeed"].Value;
-                    break;
-                }
+                var strt = (ManagementObject)o;
+                result += Convert.ToString(strt["VolumeSerialNumber"]);
             }
-            return gHz;
-        }
-        /// <summary>
-        /// Retrieving Current Language
-        /// </summary>
-        /// <returns></returns>
-        public static string GetCurrentLanguage()
-        {
-
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_BIOS");
-
-            foreach (var o in searcher.Get())
-            {
-                var wmi = (ManagementObject) o;
-                try
-                {
-                    return wmi.GetPropertyValue("CurrentLanguage").ToString();
-
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-            return "BIOS Maker: Unknown";
-
+            return result;
         }
 
         /// <summary>
-        /// Retrieving Current Language.
+        /// Return installed Software
         /// </summary>
-        /// <returns></returns>
-        public static string GetOsInformation()
-        {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
-            foreach (var o in searcher.Get())
-            {
-                var wmi = (ManagementObject) o;
-                try
-                {
-                    return ((string)wmi["Caption"]).Trim() + ", " + (string)wmi["Version"] + ", " + (string)wmi["OSArchitecture"];
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-            return "BIOS Maker: Unknown";
-        }
-
-        /// <summary>
-        /// Retrieving Processor Information.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetProcessorInformation()
-        {
-            ManagementClass mc = new ManagementClass("win32_processor");
-            ManagementObjectCollection moc = mc.GetInstances();
-            string info = string.Empty;
-            foreach (var o in moc)
-            {
-                var mo = (ManagementObject) o;
-                var name = (string)mo["Name"];
-                name = name.Replace("(TM)", "™").Replace("(tm)", "™").Replace("(R)", "®").Replace("(r)", "®").Replace("(C)", "©").Replace("(c)", "©").Replace("    ", " ").Replace("  ", " ");
-                info = name + ", " + (string)mo["Caption"] + ", " + (string)mo["SocketDesignation"];
-            }
-            return info;
-        }
-
-        /// <summary>
-        /// Retrieving Computer Name.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetComputerName()
-        {
-            ManagementClass mc = new ManagementClass("Win32_ComputerSystem");
-            ManagementObjectCollection moc = mc.GetInstances();
-            string info = string.Empty;
-            foreach (var o in moc)
-            {
-                var mo = (ManagementObject) o;
-                info = (string)mo["Name"];
-            }
-            return info;
-        }
-
-        /// <summary>
-        /// Check if a software is installed
-        /// </summary>
-        /// <returns></returns>
-        public static bool CheckIfSoftwareIsInstalled(string pSoftwareName, bool pOnlyDisplayedSoftware = false, bool pIgnoreCase = true)
-        {
-            return GetInstalledSoftwares(pOnlyDisplayedSoftware).Any(p => string.Compare(p, pSoftwareName, pIgnoreCase) == 0);
-
-        }
-        /// <summary>
-        /// Return installed Software 
-        /// </summary>
-        /// <returns></returns>
+        /// <param name="pOnlyDisplayedSoftware">if set to <c>true</c> [p only displayed software].</param>
+        /// <returns>List&lt;System.String&gt;.</returns>
         public static List<string> GetInstalledSoftwares(bool pOnlyDisplayedSoftware)
         {
             List<string> lstSoftwares = new List<string>();
@@ -653,29 +451,214 @@ namespace SimpleHelper
         }
 
         /// <summary>
-        /// Check if a programe is visible in AddRemoveSoftware
+        /// Gets the name of the localized administrators groups account.
         /// </summary>
-        /// <param name="subkey"></param>
-        /// <returns></returns>
-        private static bool IsProgramVisible(RegistryKey subkey)
+        /// <returns>System.String.</returns>
+        public static string GetLocalizedAdministratorsGroupsAccountName()
         {
-            var name = (string)subkey.GetValue("DisplayName");
-            var releaseType = (string)subkey.GetValue("ReleaseType");
-            //var unistallString = (string)subkey.GetValue("UninstallString");
-            var systemComponent = subkey.GetValue("SystemComponent");
-            var parentName = (string)subkey.GetValue("ParentDisplayName");
-
-            return
-                !string.IsNullOrEmpty(name)
-                && string.IsNullOrEmpty(releaseType)
-                && string.IsNullOrEmpty(parentName)
-                && (systemComponent == null);
+            string adminsSid = new SecurityIdentifier("S-1-5-32-544").ToString();
+            string localizedAdmin = new SecurityIdentifier(adminsSid).Translate(typeof(NTAccount)).ToString();
+            localizedAdmin = localizedAdmin.Replace(@"BUILTIN\", "");
+            return localizedAdmin;
         }
 
-        #endregion
+        /// <summary>
+        /// Gets the localized everyone account.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetLocalizedEveryoneAccount()
+        {
+            string sid = new SecurityIdentifier(WellKnownSidType.WorldSid, null).ToString();
+            string localizedsid = new SecurityIdentifier(sid).Translate(typeof(NTAccount)).ToString();
+            return localizedsid.Replace(@"BUILTIN\", "").Replace("AUTORITE NT", "");
 
-        #region Private Methods
+        }
 
+        /// <summary>
+        /// Gets the name of the localized system admin  account.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetLocalizedSystemAccountName()
+        {
+            string sid = new SecurityIdentifier(WellKnownSidType.LocalSystemSid, null).ToString();
+            string localizedsid = new SecurityIdentifier(sid).Translate(typeof(NTAccount)).ToString();
+            return localizedsid.Replace(@"BUILTIN\", "").Replace("AUTORITE NT", "");
+        }
+
+        /// <summary>
+        /// Retrieving System MAC Address.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetMacAddress()
+        {
+            ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+            ManagementObjectCollection moc = mc.GetInstances();
+            string macAddress = string.Empty;
+            foreach (var o in moc)
+            {
+                var mo = (ManagementObject)o;
+                if (macAddress == string.Empty)
+                {
+                    if ((bool)mo["IPEnabled"]) macAddress = mo["MacAddress"].ToString();
+                }
+                mo.Dispose();
+            }
+
+            macAddress = macAddress.Replace(":", "");
+            return macAddress;
+        }
+
+        /// <summary>
+        /// Retrieving No of Ram Slot on Motherboard.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetNoRamSlots()
+        {
+
+            int memSlots = 0;
+            ManagementScope oMs = new ManagementScope();
+            ObjectQuery oQuery2 = new ObjectQuery("SELECT MemoryDevices FROM Win32_PhysicalMemoryArray");
+            ManagementObjectSearcher oSearcher2 = new ManagementObjectSearcher(oMs, oQuery2);
+            ManagementObjectCollection oCollection2 = oSearcher2.Get();
+            foreach (var o in oCollection2)
+            {
+                var obj = (ManagementObject)o;
+                memSlots = Convert.ToInt32(obj["MemoryDevices"]);
+            }
+            return memSlots.ToString();
+        }
+
+        /// <summary>
+        /// Retrieving Current Language.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetOsInformation()
+        {
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
+            foreach (var o in searcher.Get())
+            {
+                var wmi = (ManagementObject)o;
+                try
+                {
+                    return ((string)wmi["Caption"]).Trim() + ", " + (string)wmi["Version"] + ", " + (string)wmi["OSArchitecture"];
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+            return "BIOS Maker: Unknown";
+        }
+
+        /// <summary>
+        /// Retrieving Physical Ram Memory.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetPhysicalMemory()
+        {
+            ManagementScope oMs = new ManagementScope();
+            ObjectQuery oQuery = new ObjectQuery("SELECT Capacity FROM Win32_PhysicalMemory");
+            ManagementObjectSearcher oSearcher = new ManagementObjectSearcher(oMs, oQuery);
+            ManagementObjectCollection oCollection = oSearcher.Get();
+
+            long memSize = 0;
+
+            // In case more than one Memory sticks are installed
+            foreach (var o in oCollection)
+            {
+                var obj = (ManagementObject)o;
+                var mCap = Convert.ToInt64(obj["Capacity"]);
+                memSize += mCap;
+            }
+            memSize = (memSize / 1024) / 1024;
+            return memSize + "MB";
+        }
+
+        /// <summary>
+        /// Gets the physical processor.
+        /// </summary>
+        /// <returns>System.Int32.</returns>
+        public static int GetPhysicalProcessor()
+        {
+            return new ManagementObjectSearcher("Select NumberOfCores from Win32_Processor").Get().Cast<ManagementBaseObject>().Sum(item => Convert.ToInt32(item.GetPropertyValue("NumberOfCores")));
+        }
+        /// <summary>
+        /// Retrieving Processor Id.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetProcessorId()
+        {
+
+            ManagementClass mc = new ManagementClass("win32_processor");
+            ManagementObjectCollection moc = mc.GetInstances();
+            string id = string.Empty;
+            foreach (var o in moc)
+            {
+                var mo = (ManagementObject)o;
+
+                id = mo.Properties["processorID"].Value.ToString();
+                break;
+            }
+            return id;
+
+        }
+
+        /// <summary>
+        /// Retrieving Processor Information.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetProcessorInformation()
+        {
+            ManagementClass mc = new ManagementClass("win32_processor");
+            ManagementObjectCollection moc = mc.GetInstances();
+            string info = string.Empty;
+            foreach (var o in moc)
+            {
+                var mo = (ManagementObject)o;
+                var name = (string)mo["Name"];
+                name = name.Replace("(TM)", "™").Replace("(tm)", "™").Replace("(R)", "®").Replace("(r)", "®").Replace("(C)", "©").Replace("(c)", "©").Replace("    ", " ").Replace("  ", " ");
+                info = name + ", " + (string)mo["Caption"] + ", " + (string)mo["SocketDesignation"];
+            }
+            return info;
+        }
+
+        /// <summary>
+        /// Get local computer Windows License Key
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetWindowsProductKey()
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Unix
+                || Environment.OSVersion.Platform == PlatformID.MacOSX
+                || Environment.OSVersion.Platform == PlatformID.WinCE
+                || Environment.OSVersion.Platform == PlatformID.Xbox)
+                return string.Empty;
+
+            RegistryKey localKey;
+            if (Environment.Is64BitOperatingSystem)
+            {
+                localKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+            }
+            else
+            {
+                localKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
+            }
+            var value = (byte[])localKey.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion")?.GetValue("DigitalProductId");
+            var digitalProductId = value;
+            var isWin8OrUp =
+                (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 2)
+                ||
+                (Environment.OSVersion.Version.Major > 6);
+            var productKey = isWin8OrUp ? DecodeProductKeyWin8AndUp(digitalProductId) : DecodeProductKey(digitalProductId);
+            localKey.Close();
+            return productKey;
+
+        }
+        /// <summary>
+        /// Decodes the product key.
+        /// </summary>
+        /// <param name="digitalProductId">The digital product identifier.</param>
+        /// <returns>System.String.</returns>
         private static string DecodeProductKey(byte[] digitalProductId)
         {
             const int keyStartIndex = 52;
@@ -717,6 +700,11 @@ namespace SimpleHelper
             return new string(decodedChars);
         }
 
+        /// <summary>
+        /// Decodes the product key win8 and up.
+        /// </summary>
+        /// <param name="digitalProductId">The digital product identifier.</param>
+        /// <returns>System.String.</returns>
         private static string DecodeProductKeyWin8AndUp(byte[] digitalProductId)
         {
             var key = string.Empty;
@@ -752,6 +740,24 @@ namespace SimpleHelper
             return key;
         }
 
-        #endregion
+        /// <summary>
+        /// Check if a programe is visible in AddRemoveSoftware
+        /// </summary>
+        /// <param name="subkey">The subkey.</param>
+        /// <returns><c>true</c> if [is program visible] [the specified subkey]; otherwise, <c>false</c>.</returns>
+        private static bool IsProgramVisible(RegistryKey subkey)
+        {
+            var name = (string)subkey.GetValue("DisplayName");
+            var releaseType = (string)subkey.GetValue("ReleaseType");
+            //var unistallString = (string)subkey.GetValue("UninstallString");
+            var systemComponent = subkey.GetValue("SystemComponent");
+            var parentName = (string)subkey.GetValue("ParentDisplayName");
+
+            return
+                !string.IsNullOrEmpty(name)
+                && string.IsNullOrEmpty(releaseType)
+                && string.IsNullOrEmpty(parentName)
+                && (systemComponent == null);
+        }
     }
 }

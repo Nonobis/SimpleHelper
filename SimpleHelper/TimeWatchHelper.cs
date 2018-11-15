@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace SimpleHelper
 {
+    /// <summary>
+    /// Class TimeWatchHelper.
+    /// </summary>
     public static class TimeWatchHelper
     {
         /// <summary>
@@ -25,9 +28,9 @@ namespace SimpleHelper
         }
 
         /// <summary>
-        ///   Gets the elapsed time as formatted string
+        /// Gets the elapsed time as formatted string
         /// </summary>
-        /// <returns></returns>
+        /// <value>The elapsed time formatted.</value>
         public static string ElapsedTimeFormatted
         {
             get
@@ -42,19 +45,19 @@ namespace SimpleHelper
 
 
         /// <summary>
+        /// Restartwatches this instance.
+        /// </summary>
+        public static void Restart()
+        {
+            sw.Restart();
+        }
+
+        /// <summary>
         /// Starts this instance.
         /// </summary>
         public static void Start()
         {
             sw = Stopwatch.StartNew();
-        }
-
-        /// <summary>
-        ///  Restartwatches this instance.
-        /// </summary>
-        public static void Restart()
-        {
-            sw.Restart();
         }
 
         /// <summary>

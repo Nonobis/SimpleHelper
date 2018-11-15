@@ -3,6 +3,10 @@ using System.Xml.Serialization;
 
 namespace SimpleHelper
 {
+    /// <summary>
+    /// Class SerializeHelper.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class SerializeHelper<T>
     {
         /// <summary>
@@ -22,7 +26,7 @@ namespace SimpleHelper
         /// Deserialize
         /// </summary>
         /// <param name="pPath">The path.</param>
-        /// <returns></returns>
+        /// <returns>T.</returns>
         public static T Deserialize(string pPath)
         {
             XmlSerializer oXmlSerializer = new XmlSerializer(typeof(T));

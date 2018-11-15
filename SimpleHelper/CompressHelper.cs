@@ -5,14 +5,16 @@ using System.Xml.Serialization;
 
 namespace SimpleHelper
 {
+    /// <summary>
+    /// Class CompressHelper.
+    /// </summary>
     public static class CompressHelper
     {
         /// <summary>
-        /// Gs the zip.
+        /// gs the zip.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
+        /// <returns>System.String.</returns>
         public static string GZip(string value)
         {
             //Transform string into byte[]  
@@ -50,8 +52,7 @@ namespace SimpleHelper
         /// Uns the G zip.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
+        /// <returns>System.String.</returns>
         public static string UnGZip(string value)
         {
             //Transform string into byte[]
@@ -92,7 +93,7 @@ namespace SimpleHelper
         /// Compresses the memory byte array.
         /// </summary>
         /// <param name="raw">The raw.</param>
-        /// <returns></returns>
+        /// <returns>System.Byte[].</returns>
         public static byte[] CompressMemoryByteArray(byte[] raw)
         {
             using (MemoryStream memory = new MemoryStream())
@@ -110,7 +111,7 @@ namespace SimpleHelper
         /// Decompresses the memory byte array.
         /// </summary>
         /// <param name="gzip">The gzip.</param>
-        /// <returns></returns>
+        /// <returns>System.Byte[].</returns>
         public static byte[] DecompressMemoryByteArray(byte[] gzip)
         {
             // Create a GZIP stream with decompression mode.
@@ -169,7 +170,7 @@ namespace SimpleHelper
         /// Serializes as XML and compress.
         /// </summary>
         /// <param name="obj">The obj.</param>
-        /// <returns></returns>
+        /// <returns>System.Byte[].</returns>
         public static byte[] SerializeAsXmlAndCompress(object obj)
         {
             using (MemoryStream compressed = new MemoryStream())
@@ -189,7 +190,7 @@ namespace SimpleHelper
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data">The data.</param>
-        /// <returns></returns>
+        /// <returns>T.</returns>
         public static T DecompressAndDeserializeAsXml<T>(byte[] data)
         {
             using (MemoryStream compressed = new MemoryStream(data))
