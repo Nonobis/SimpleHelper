@@ -2,6 +2,8 @@
 Simple collection of helper for your project.
 -----------------------------------------------------
 
+PR are accepted !
+
 ## Requirements:
 None
     
