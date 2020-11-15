@@ -59,5 +59,20 @@ namespace SimpleHelper.Core
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// check given directory is hidden or not
+        /// </summary>
+        /// <param name="directoryPath">Path to the directory</param>
+        /// <returns>Returns bool Is Hidden or not</returns>
+        public static bool IsHidden(string directoryPath)
+        {
+            DirectoryInfo dir = new DirectoryInfo(directoryPath);
+            if ((dir.Attributes & FileAttributes.Hidden) == (FileAttributes.Hidden))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
