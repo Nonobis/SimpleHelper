@@ -49,6 +49,7 @@
     <Compile Include="DataTableHelper.cs" />
     <Compile Include="DecimalHelper.cs" />
     <Compile Include="DirectoryHelper.cs" />
+    <Compile Include="EnumHelper.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="FormUploadHelper.cs" />
     <Compile Include="LocalComputerHelper.cs" />
