@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SharpHelper
+namespace SimpleHelper
 {
     public static class MD5Helper
     {

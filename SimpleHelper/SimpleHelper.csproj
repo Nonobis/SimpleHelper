@@ -78,6 +78,7 @@
     <Compile Include="SemaphoreHelper.cs" />
     <Compile Include="SerializeHelper.cs" />
     <Compile Include="TimeWatchHelper.cs" />
+    <Compile Include="XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
