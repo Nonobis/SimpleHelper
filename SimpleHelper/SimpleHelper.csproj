@@ -47,6 +47,7 @@
     <Compile Include="AssemblyHelper.cs" />
     <Compile Include="CompressHelper.cs" />
     <Compile Include="DataTableHelper.cs" />
+    <Compile Include="DecimalHelper.cs" />
     <Compile Include="DirectoryHelper.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="FormUploadHelper.cs" />
@@ -69,7 +70,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties package_1builder_1json__JSONSchema="Remove Nuget Package Bui" BuildVersion_StartDate="2000/1/1" BuildVersion_UseGlobalSettings="True" />
+      <UserProperties BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2000/1/1" package_1builder_1json__JSONSchema="Remove Nuget Package Bui" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
