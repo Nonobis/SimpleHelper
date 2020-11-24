@@ -15,10 +15,8 @@
     <summary>Simple collection of Helper for your project.</summary>
     <authors>Arnaud Dartois</authors>
     <owners>Arnaud Dartois</owners>
-    <licenseUrl>https://github.com/Nonobis/SimpleHelper/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Nonobis/SimpleHelper</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<releaseNotes></releaseNotes>
 		<copyright>Copyright, Arnaud Dartois 2016-2020</copyright>
 		<tags>Helper Library Collection NetStandard</tags>
 	</metadata>
