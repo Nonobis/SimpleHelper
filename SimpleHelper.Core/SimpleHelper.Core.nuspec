@@ -19,7 +19,7 @@
     <projectUrl>https://github.com/Nonobis/SimpleHelper</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright, Arnaud Dartois 2016-2017</copyright>
+		<copyright>Copyright, Arnaud Dartois 2016-2020</copyright>
 		<tags>Helper Library Collection NetStandard</tags>
 	</metadata>
   <files>

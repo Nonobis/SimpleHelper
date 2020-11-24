@@ -21,8 +21,8 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes></PackageReleaseNotes>
-    <Version>0.0.8</Version>
+    <PackageReleaseNotes>v0.0.9 : Merge PR from chirag-bhatt</PackageReleaseNotes>
+    <Version>0.0.9</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/Nonobis/SimpleHelper/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
